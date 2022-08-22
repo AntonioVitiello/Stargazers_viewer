@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="owners">
+        <item>""</item>
+        <item>pagopa</item>
+        <item>italia</item>
+        <item>android</item>
+        <item>android</item>
+        <item>armory3d</item>
+    </array>
+    <array name="repos">
+        <item>""</item>
+        <item>io-app</item>
+        <item>daf-dataportal</item>
+        <item>architecture-samples</item>
+        <item>compose-samples</item>
+        <item>armorlab</item>
+    </array>
+</resources>

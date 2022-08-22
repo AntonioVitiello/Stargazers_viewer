@@ -1,0 +1,147 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+}
+
+android {
+    compileSdkVersion 32
+    buildToolsVersion "30.0.3"
+    defaultConfig {
+        applicationId "com.vitiello.android.stargazers"
+        minSdkVersion 24
+        targetSdkVersion 32
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    signingConfigs {
+        release {
+            if (project.hasProperty('RELEASE_STORE_FILE')) {
+                storeFile file(RELEASE_STORE_FILE)
+                storePassword RELEASE_STORE_PASSWORD
+                keyAlias RELEASE_KEY_ALIAS
+                keyPassword RELEASE_KEY_PASSWORD
+            } else {
+                storeFile file('debug.keystore')
+                storePassword 'android'
+                keyAlias 'androiddebugkey'
+                keyPassword 'android'
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
+            minifyEnabled false
+            shrinkResources false
+            zipAlignEnabled true
+            testCoverageEnabled true
+            isDefault true
+        }
+
+        release {
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+
+        all {
+            Properties properties = new Properties()
+            if (project.rootProject.file('local.properties').canRead()) {
+                properties.load(new FileInputStream(project.rootProject.file('local.properties')))
+
+                def username = properties['username'].toString()
+                def password = properties['password'].toString()
+                buildConfigField "String", "USERNAME", "\"${username}\""
+                buildConfigField "String", "PASSWORD", "\"${password}\""
+
+                def client_id = properties['client_id'] ?: ""
+                def client_secret = properties['client_secret'] ?: ""
+                buildConfigField "String", "CLIENT_ID", "\"${client_id}\""
+                buildConfigField "String", "CLIENT_SECRET", "\"${client_secret}\""
+            }
+        }
+    }
+
+    // Always show the result of every unit test when running via command line, even if it passes.
+    testOptions.unitTests {
+        includeAndroidResources = true
+        returnDefaultValues = true
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'androidx.core:core-ktx:1.8.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-jackson:2.9.0'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+    // IMPORTANT: using same version!
+    implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
+
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'androidx.fragment:fragment-ktx:1.5.1'
+    implementation 'com.muddzdev:styleabletoast:2.2.2'
+    implementation 'androidx.test.ext:junit-ktx:1.1.3'
+
+    // Dependencies for local unit tests
+    implementation 'androidx.test.espresso:espresso-idling-resource:3.4.0'
+    testImplementation 'junit:junit:{strictly 4.13.2}'
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
+    testImplementation 'org.mockito:mockito-inline:2.21.0'
+    testImplementation 'org.mockito.kotlin:mockito-kotlin:4.0.0'
+    testImplementation 'org.hamcrest:hamcrest-all:1.3'
+    testImplementation 'androidx.arch.core:core-testing:2.1.0'
+    testImplementation 'org.robolectric:robolectric:4.8.1'
+    testImplementation "com.google.truth:truth:0.42"
+    testImplementation('org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4') {
+        // https://github.com/Kotlin/kotlinx.coroutines/tree/master/kotlinx-coroutines-debug#debug-agent-and-android
+        exclude group: "org.jetbrains.kotlinx", module: "kotlinx-coroutines-debug"
+    }
+
+    // Dependencies for Android instrumented unit tests
+    androidTestImplementation 'junit:junit:{strictly 4.13.2}'
+    androidTestImplementation 'org.mockito:mockito-core:3.4.6'
+    androidTestImplementation 'com.linkedin.dexmaker:dexmaker-mockito:2.28.1'
+    androidTestImplementation('org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4') {
+        // https://github.com/Kotlin/kotlinx.coroutines/tree/master/kotlinx-coroutines-debug#debug-agent-and-android
+        exclude group: "org.jetbrains.kotlinx", module: "kotlinx-coroutines-debug"
+    }
+
+    debugImplementation 'androidx.fragment:fragment-testing:1.5.1'
+    implementation 'androidx.test:core:1.4.0'
+
+    // AndroidX Test - JVM testing
+    testImplementation 'androidx.test:core-ktx:1.4.0'
+    testImplementation 'androidx.test.ext:junit:1.1.3'
+
+    // AndroidX Test - Instrumented testing
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.3.0'
+    androidTestImplementation 'androidx.arch.core:core-testing:2.1.0'
+
+}

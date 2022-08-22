@@ -1,0 +1,5 @@
+<!-- This file should be deleted and instead put the property 'client_id' in local.properties file -->
+<resources>
+    <string name="tikid" translatable="false">a138cf4e301a6f6ccafc</string>
+    <string name="tikcod" translatable="false">56813d562244408e701e1e63447c6dd3ba85db40</string>
+</resources>

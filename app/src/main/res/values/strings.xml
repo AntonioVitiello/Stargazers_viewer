@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Stargazers on Github</string>
+    <string name="enter_comment">Please enter a comment</string>
+    <string name="undefined_comment_url">Undefined comment url, please try again later</string>
+    <string name="implements_icredentials">Owner should implements ICredentialsDialogListener interface</string>
+    <string name="credentials">Credentials</string>
+    <string name="cancel">Cancel</string>
+    <string name="accept">Continue</string>
+    <string name="no_repositories">No repositories available</string>
+    <string name="select_repository">Please select repository</string>
+    <string name="user_no_repositories">User has no repositories</string>
+    <string name="comment_created">Comment created!</string>
+    <string name="no_issues">Repository has no issues</string>
+    <string name="generic_network_error">Network Error, please try again later.</string>
+    <string name="github_oauth_msg">Github requires OAuth now!</string>
+    <string name="login_code_error_msg">Unable to login.\nPlease try again later.</string>
+    <string name="login_success_msg">You are successfully logged in!</string>
+    <string name="empty_fields_msg">Type owner/repository first.</string>
+    <string name="progress_wheel_loading_text">Loading…</string>
+    <string name="internet_not_reachable_msg">Please check Internet connection.</string>
+    <string name="type_owner_hint">Type owner…</string>
+    <string name="type_repo_hint">Type Github repo…</string>
+    <string name="avatar_desc">avatar image</string>
+    <string name="load_stargazers_label">Load Stargazers</string>
+    <string name="fill_you_credentials_here">Fill you credentials here</string>
+    <string name="username">Username:</string>
+    <string name="password">Password</string>
+</resources>

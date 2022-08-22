@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.vitiello.android.stargazers.view.StargazersFragment"
+    tools:showIn="@layout/activity_stargazers">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/ownerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/ownerEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="name"
+            android:ellipsize="end"
+            android:hint="@string/type_owner_hint"
+            android:inputType="text"
+            android:lines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/repoLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        app:layout_constraintTop_toBottomOf="@id/ownerLayout">
+
+        <EditText
+            android:id="@+id/repoEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="name"
+            android:ellipsize="end"
+            android:hint="@string/type_repo_hint"
+            android:inputType="text"
+            android:lines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/loadButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:text="@string/load_stargazers_label"
+        android:textAllCaps="true"
+        app:layout_constraintTop_toBottomOf="@id/repoLayout" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/design_default_color_secondary"
+        app:layout_constraintBottom_toTopOf="@id/stargazerRecycler" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/stargazerRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/loadButton"
+        tools:itemCount="10"
+        tools:listitem="@layout/item_stargazer" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/selector_rect_white_gray"
+    android:paddingTop="8dp">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/avatarImage"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="8dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/avatar_desc"
+        android:scaleType="fitXY"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/ownerText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:lines="1"
+        app:layout_constraintBottom_toTopOf="@id/htmlUrlText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/avatarImage"
+        app:layout_constraintTop_toTopOf="@id/avatarImage"
+        app:layout_constraintVertical_chainStyle="spread"
+        tools:text="@tools:sample/last_names" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/htmlUrlText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:ellipsize="end"
+        android:lines="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/ownerText"
+        app:layout_constraintStart_toEndOf="@id/avatarImage"
+        app:layout_constraintTop_toBottomOf="@id/ownerText"
+        tools:text="@tools:sample/lorem/random" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/design_default_color_secondary"
+        app:layout_constraintTop_toBottomOf="@id/avatarImage" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
