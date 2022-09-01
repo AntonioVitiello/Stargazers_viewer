@@ -84,7 +84,9 @@ class StargazersViewModelTest {
             println("LOG Error: $thr")
         })
 
-        whenever(repositoryMock.loadStargazerSingle(Mockito.anyString(), Mockito.anyString()))
+        whenever(repositoryMock.loadStargazerSingle(
+            Mockito.anyString(), Mockito.anyString(), Mockito.anyInt(), Mockito.anyInt())
+        )
             .thenReturn(singleResponse)
 
         val progressObserver = viewModel.progressLiveData.testObserver()
@@ -93,7 +95,9 @@ class StargazersViewModelTest {
         val event = viewModel.stargazersLiveData.getOrAwaitValue()
 
 
-        verify(repositoryMock, times(1)).loadStargazerSingle(Mockito.anyString(), Mockito.anyString())
+        verify(repositoryMock, times(1)).loadStargazerSingle(
+            Mockito.anyString(), Mockito.anyString(), Mockito.anyInt(), Mockito.anyInt()
+        )
         Truth.assertThat(eventModel.peekContent()[0].id)
             .isEqualTo(event.getContentIfNotHandled()?.get(0)?.id)
         assertEquals(2, progressObserver.observedValues.size)
@@ -102,7 +106,9 @@ class StargazersViewModelTest {
 
     @Test
     fun `load stargazers is failure`() {
-        whenever(repositoryMock.loadStargazerSingle(Mockito.anyString(), Mockito.anyString()))
+        whenever(repositoryMock.loadStargazerSingle(
+            Mockito.anyString(), Mockito.anyString(), Mockito.anyInt(), Mockito.anyInt())
+        )
             .thenAnswer { Single.error<retrofit2.HttpException>(simulatedException()) }
 
         val progressObserver = viewModel.progressLiveData.testObserver()
