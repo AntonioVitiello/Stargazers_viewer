@@ -43,10 +43,15 @@ class StargazersAdapter(private val mListener: ((StargazerModel) -> Unit)) :
     @SuppressLint("NotifyDataSetChanged")
     fun switchData(data: List<StargazerModel>?) {
         mDataItems.clear()
-        data?.let {
-            mDataItems.addAll(data)
+        if (data != null) {
             mAnimationId = mAnims.random()
+            addData(data)
         }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun addData(data: List<StargazerModel>) {
+        mDataItems.addAll(data)
         notifyDataSetChanged()
     }
 

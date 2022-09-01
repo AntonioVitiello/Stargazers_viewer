@@ -80,6 +80,10 @@ class StargazersActivity : AppCompatActivity(R.layout.activity_stargazers), Cred
                 mViewModel.loadStargazerFromMenu(5)
                 return true
             }
+            R.id.menu_item_06 -> {
+                mViewModel.loadStargazerFromMenu(6)
+                return true
+            }
         }
         return super.onOptionsItemSelected(item)
     }

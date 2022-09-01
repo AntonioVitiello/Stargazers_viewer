@@ -15,6 +15,7 @@ import com.vitiello.android.stargazers.network.map.mapTokenReponse
 import com.vitiello.android.stargazers.tools.SingleEvent
 import com.vitiello.android.stargazers.tools.hostAvailable
 import com.vitiello.android.stargazers.tools.manageProgress
+import com.vitiello.android.stargazers.tools.safeLet
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -63,6 +64,15 @@ class StargazersViewModel(
     private val mRepos by lazy(LazyThreadSafetyMode.NONE) {
         getApplication<Application>().resources.obtainTypedArray(R.array.repos)
     }
+
+    private var currentPage = 0
+    private val perPage = 30
+    private var totalPages = 1
+    private var mOwner: String? = null
+    private var mRepo: String? = null
+    var hasMorePages: Boolean = false
+        private set
+
 
     companion object {
         const val TAG = "StargazersViewModel"
@@ -133,12 +143,28 @@ class StargazersViewModel(
     }
 
     fun loadStargazers(owner: String, repo: String) {
+        currentPage = 0
+        hasMorePages = true
+        totalPages = 1
+        mOwner = owner
+        mRepo = repo
+        loadNextStargazers()
+    }
+
+    fun loadNextStargazers() {
+        safeLet(mOwner, mRepo) { owner, repo ->
+            loadStargazersPaged(owner, repo, currentPage + 1)
+        }
+    }
+
+    private fun loadStargazersPaged(owner: String, repo: String, page: Int) {
         mDisposable.add(
-            mRepository.loadStargazerSingle(owner, repo)
+            mRepository.loadStargazerSingle(owner, repo, page, perPage)
                 .subscribeOn(Schedulers.io())
                 .manageProgress(_progressLiveData)
                 .map(::mapStargazerResponse)
                 .subscribe({ stargazers ->
+                    currentPage = page
                     _stargazersLiveData.postValue(SingleEvent(stargazers))
                 }, { exc ->
                     _errorLiveData.postValue(SingleEvent(true))
@@ -180,6 +206,10 @@ class StargazersViewModel(
     @MainThread
     fun hideLoadButton(hide: Boolean) {
         _hideLoadButtonLiveData.value = SingleEvent(hide)
+    }
+
+    fun isFirstPage(): Boolean {
+        return currentPage == 1
     }
 
 

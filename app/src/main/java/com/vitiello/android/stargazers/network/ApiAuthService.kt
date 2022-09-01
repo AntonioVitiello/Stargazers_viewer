@@ -13,7 +13,12 @@ import retrofit2.http.Query
 interface ApiAuthService {
 
     @GET("/repos/{owner}/{repo}/stargazers")
-    fun loadStargazer(@Path("owner") owner: String, @Path("repo") githubRepo: String): Single<StargazerResponse>
+    fun loadStargazer(
+        @Path("owner") owner: String,
+        @Path("repo") githubRepo: String,
+        @Query("page") page: Int,
+        @Query("per_page") perPage: Int
+    ): Single<StargazerResponse>
 
     @GET("user/repos")
     fun loadGithubRepos(@Query("per_page") itemsPerPage: Int): Single<List<GithubRepoResponse>>

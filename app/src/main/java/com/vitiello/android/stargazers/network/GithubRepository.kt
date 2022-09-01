@@ -27,8 +27,9 @@ class GithubRepository {
         return mNetworkProvider.loadGithubReposSingle(itemsPerPage)
     }
 
-    fun loadStargazerSingle(owner: String, githubRepo: String): Single<StargazerResponse> {
-        return mNetworkProvider.loadStargazerSingle(owner, githubRepo)
+    fun loadStargazerSingle(owner: String, githubRepo: String, page: Int, perPage: Int):
+            Single<StargazerResponse> {
+        return mNetworkProvider.loadStargazerSingle(owner, githubRepo, page, perPage)
     }
 
 }

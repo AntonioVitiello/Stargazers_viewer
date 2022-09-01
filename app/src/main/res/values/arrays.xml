@@ -7,6 +7,7 @@
         <item>android</item>
         <item>android</item>
         <item>armory3d</item>
+        <item>facebook</item>
     </array>
     <array name="repos">
         <item>""</item>
@@ -15,5 +16,6 @@
         <item>architecture-samples</item>
         <item>compose-samples</item>
         <item>armorlab</item>
+        <item>react-native</item>
     </array>
 </resources>

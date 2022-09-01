@@ -112,8 +112,9 @@ class NetworkProvider {
         return mAuthService.loadGithubRepos(itemsPerPage)
     }
 
-    fun loadStargazerSingle(owner: String, githubRepo: String): Single<StargazerResponse> {
-        return mAuthService.loadStargazer(owner, githubRepo)
+    fun loadStargazerSingle(owner: String, githubRepo: String, page: Int, perPage: Int):
+            Single<StargazerResponse> {
+        return mAuthService.loadStargazer(owner, githubRepo, page, perPage)
     }
 
 }

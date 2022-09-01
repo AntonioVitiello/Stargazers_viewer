@@ -7,6 +7,8 @@ import androidx.core.view.isInvisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.vitiello.android.stargazers.R
 import com.vitiello.android.stargazers.model.StargazerModel
 import com.vitiello.android.stargazers.tools.SingleEvent
@@ -24,6 +26,7 @@ import kotlinx.android.synthetic.main.fragment_stargazers.*
 class StargazersFragment : Fragment(R.layout.fragment_stargazers) {
     private val mViewModel by activityViewModels<StargazersViewModel> { StargazersViewModel.ViewModelFactory(requireActivity().application) }
     private lateinit var mAdapter: StargazersAdapter
+    private var mIsPagingEnabled = true
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,13 +49,37 @@ class StargazersFragment : Fragment(R.layout.fragment_stargazers) {
             startActivity(intent)
         }
         stargazerRecycler.adapter = mAdapter
+
+        val layoutManager = stargazerRecycler.layoutManager as LinearLayoutManager
+        stargazerRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (mIsPagingEnabled && mViewModel.hasMorePages && dy > 0) {
+                    val visibleItemsCount = layoutManager.childCount
+                    val totalItemCount = layoutManager.itemCount
+                    val pastVisiblesItems = layoutManager.findFirstVisibleItemPosition()
+                    if (visibleItemsCount + pastVisiblesItems >= totalItemCount) {
+                        mIsPagingEnabled = false
+                        mViewModel.loadNextStargazers()
+                    }
+                }
+            }
+        })
+
+
         loadButton.setOnClickListener { loadStargazers() }
     }
 
     private fun fillData(event: SingleEvent<List<StargazerModel>>) {
         event.getContentIfNotHandled()?.let { models ->
-            mAdapter.switchData(models)
-            stargazerRecycler.smoothScrollToPosition(0)
+            if (mViewModel.isFirstPage()) {
+                mAdapter.switchData(models)
+                stargazerRecycler.smoothScrollToPosition(0)
+            } else {
+                mAdapter.addData(models)
+            }
+            if (models.isNotEmpty()) {
+                mIsPagingEnabled = true
+            }
         }
     }
 
