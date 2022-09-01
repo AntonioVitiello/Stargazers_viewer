@@ -100,6 +100,7 @@ class StargazersFragment : Fragment(R.layout.fragment_stargazers) {
     }
 
     private fun loadStargazers() {
+        closeKeyboard()
         takeIfNotEmpty(ownerEdit, repoEdit) { owner, repo ->
             mViewModel.loadStargazers(owner, repo)
         } ?: run {
