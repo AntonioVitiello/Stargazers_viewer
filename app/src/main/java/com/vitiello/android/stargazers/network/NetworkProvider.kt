@@ -9,6 +9,7 @@ import io.reactivex.Single
 import io.reactivex.plugins.RxJavaPlugins
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.jackson.JacksonConverterFactory
@@ -113,7 +114,7 @@ class NetworkProvider {
     }
 
     fun loadStargazerSingle(owner: String, githubRepo: String, page: Int, perPage: Int):
-            Single<StargazerResponse> {
+            Single<Response<StargazerResponse>> {
         return mAuthService.loadStargazer(owner, githubRepo, page, perPage)
     }
 

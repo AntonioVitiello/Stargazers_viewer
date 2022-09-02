@@ -7,6 +7,7 @@ import androidx.lifecycle.*
 import com.vitiello.android.stargazers.BuildConfig
 import com.vitiello.android.stargazers.R
 import com.vitiello.android.stargazers.model.GithubRepoModel
+import com.vitiello.android.stargazers.model.LinkHeader
 import com.vitiello.android.stargazers.model.StargazerModel
 import com.vitiello.android.stargazers.network.GithubRepository
 import com.vitiello.android.stargazers.network.map.mapRepositories
@@ -65,14 +66,9 @@ class StargazersViewModel(
         getApplication<Application>().resources.obtainTypedArray(R.array.repos)
     }
 
-    private var currentPage = 0
-    private val perPage = 30
-    private var totalPages = 1
     private var mOwner: String? = null
     private var mRepo: String? = null
-    var hasMorePages: Boolean = false
-        private set
-
+    private val linkHeader = LinkHeader()
 
     companion object {
         const val TAG = "StargazersViewModel"
@@ -143,28 +139,29 @@ class StargazersViewModel(
     }
 
     fun loadStargazers(owner: String, repo: String) {
-        currentPage = 0
-        hasMorePages = true
-        totalPages = 1
         mOwner = owner
         mRepo = repo
+        linkHeader.resetToFirstPage()
         loadNextStargazers()
     }
 
     fun loadNextStargazers() {
-        safeLet(mOwner, mRepo) { owner, repo ->
-            loadStargazersPaged(owner, repo, currentPage + 1)
+        if (linkHeader.nextPage > 0 && linkHeader.nextPage <= linkHeader.lastPage) {
+            safeLet(mOwner, mRepo) { owner, repo ->
+                loadStargazersPaged(owner, repo, linkHeader.nextPage, linkHeader.perPage)
+            }
         }
     }
 
-    private fun loadStargazersPaged(owner: String, repo: String, page: Int) {
+    private fun loadStargazersPaged(owner: String, repo: String, nextPage: Int, perPage: Int) {
         mDisposable.add(
-            mRepository.loadStargazerSingle(owner, repo, page, perPage)
+            mRepository.loadStargazerSingle(owner, repo, nextPage, perPage)
                 .subscribeOn(Schedulers.io())
                 .manageProgress(_progressLiveData)
-                .map(::mapStargazerResponse)
+                .map { response ->
+                    mapStargazerResponse(linkHeader, response)
+                }
                 .subscribe({ stargazers ->
-                    currentPage = page
                     _stargazersLiveData.postValue(SingleEvent(stargazers))
                 }, { exc ->
                     _errorLiveData.postValue(SingleEvent(true))
@@ -209,7 +206,7 @@ class StargazersViewModel(
     }
 
     fun isFirstPage(): Boolean {
-        return currentPage == 1
+        return linkHeader.prevPage == 0
     }
 
 

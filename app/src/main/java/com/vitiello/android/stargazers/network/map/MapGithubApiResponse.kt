@@ -1,18 +1,21 @@
 package com.vitiello.android.stargazers.network.map
 
 import com.vitiello.android.stargazers.model.GithubRepoModel
+import com.vitiello.android.stargazers.model.LinkHeader
 import com.vitiello.android.stargazers.model.StargazerModel
 import com.vitiello.android.stargazers.network.dto.GithubRepoResponse
 import com.vitiello.android.stargazers.network.dto.GithubTokenResponse
 import com.vitiello.android.stargazers.network.dto.StargazerResponse
+import retrofit2.Response
 
 /**
  * Created by Antonio Vitiello
  */
 
-fun mapStargazerResponse(response: StargazerResponse): List<StargazerModel> {
+fun mapStargazerResponse(linkHeader: LinkHeader, response: Response<StargazerResponse>): List<StargazerModel> {
+    linkHeader.parseResponse(response)
     return mutableListOf<StargazerModel>().apply {
-        response.forEach { responseItem ->
+        response.body()?.forEach { responseItem ->
             responseItem.id?.let { idItem ->
                 add(
                     StargazerModel(

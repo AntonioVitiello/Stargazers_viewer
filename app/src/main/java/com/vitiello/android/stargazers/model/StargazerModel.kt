@@ -11,5 +11,5 @@ class StargazerModel(
     var id: Int,
     var username: String,
     var avatarUrl: String? = null,
-    var htmlUrl: String? = null
+    var htmlUrl: String? = null,
 ) : Parcelable

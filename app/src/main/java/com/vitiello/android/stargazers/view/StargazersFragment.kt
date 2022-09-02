@@ -53,7 +53,7 @@ class StargazersFragment : Fragment(R.layout.fragment_stargazers) {
         val layoutManager = stargazerRecycler.layoutManager as LinearLayoutManager
         stargazerRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (mIsPagingEnabled && mViewModel.hasMorePages && dy > 0) {
+                if (mIsPagingEnabled && dy > 0) {
                     val visibleItemsCount = layoutManager.childCount
                     val totalItemCount = layoutManager.itemCount
                     val pastVisiblesItems = layoutManager.findFirstVisibleItemPosition()

@@ -4,6 +4,7 @@ import com.vitiello.android.stargazers.network.dto.GithubRepoResponse
 import com.vitiello.android.stargazers.network.dto.GithubTokenResponse
 import com.vitiello.android.stargazers.network.dto.StargazerResponse
 import io.reactivex.Single
+import retrofit2.Response
 
 /**
  * Created by Antonio Vitiello
@@ -28,7 +29,7 @@ class GithubRepository {
     }
 
     fun loadStargazerSingle(owner: String, githubRepo: String, page: Int, perPage: Int):
-            Single<StargazerResponse> {
+            Single<Response<StargazerResponse>> {
         return mNetworkProvider.loadStargazerSingle(owner, githubRepo, page, perPage)
     }
 

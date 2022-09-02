@@ -9,7 +9,6 @@ import com.vitiello.android.stargazers.data.source.simulatedException
 import com.vitiello.android.stargazers.data.source.stargazerItem
 import com.vitiello.android.stargazers.network.GithubRepository
 import com.vitiello.android.stargazers.network.dto.GithubRepoResponse
-import com.vitiello.android.stargazers.network.map.mapStargazerResponse
 import com.vitiello.android.stargazers.tools.SingleEvent
 import com.vitiello.android.stargazers.viewmodel.StargazersViewModel
 import io.reactivex.Single
@@ -28,6 +27,7 @@ import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
+import retrofit2.Response
 
 
 /**
@@ -73,21 +73,23 @@ class StargazersViewModelTest {
     fun `load stargazers is successful`() {
         val owner = gitHubOwners[2]
         val repo = gitHubRepos[2]
-        val stargazersMockResponse = stargazerItem()
+        val stargazersMockResponse = Response.success(stargazerItem())
         val singleResponse = Single.just(stargazersMockResponse)
-        val eventModel = SingleEvent(mapStargazerResponse(stargazersMockResponse))
+        val eventModel = SingleEvent(stargazersMockResponse)
 
-        // optional just for logging
+        // optional: just for logging
+        @Suppress("UNUSED_VARIABLE")
         val logger = singleResponse.subscribe({ response ->
             println("LOG Response:$response")
         }, { thr ->
             println("LOG Error: $thr")
         })
 
-        whenever(repositoryMock.loadStargazerSingle(
-            Mockito.anyString(), Mockito.anyString(), Mockito.anyInt(), Mockito.anyInt())
-        )
-            .thenReturn(singleResponse)
+        whenever(
+            repositoryMock.loadStargazerSingle(
+                Mockito.anyString(), Mockito.anyString(), Mockito.anyInt(), Mockito.anyInt()
+            )
+        ).thenReturn(singleResponse)
 
         val progressObserver = viewModel.progressLiveData.testObserver()
         val errorObserver = viewModel.errorLiveData.testObserver()
@@ -98,7 +100,7 @@ class StargazersViewModelTest {
         verify(repositoryMock, times(1)).loadStargazerSingle(
             Mockito.anyString(), Mockito.anyString(), Mockito.anyInt(), Mockito.anyInt()
         )
-        Truth.assertThat(eventModel.peekContent()[0].id)
+        Truth.assertThat(eventModel.peekContent().body()?.get(0)?.id)
             .isEqualTo(event.getContentIfNotHandled()?.get(0)?.id)
         assertEquals(2, progressObserver.observedValues.size)
         assertEquals(0, errorObserver.observedValues.size)
@@ -106,8 +108,10 @@ class StargazersViewModelTest {
 
     @Test
     fun `load stargazers is failure`() {
-        whenever(repositoryMock.loadStargazerSingle(
-            Mockito.anyString(), Mockito.anyString(), Mockito.anyInt(), Mockito.anyInt())
+        whenever(
+            repositoryMock.loadStargazerSingle(
+                Mockito.anyString(), Mockito.anyString(), Mockito.anyInt(), Mockito.anyInt()
+            )
         )
             .thenAnswer { Single.error<retrofit2.HttpException>(simulatedException()) }
 
