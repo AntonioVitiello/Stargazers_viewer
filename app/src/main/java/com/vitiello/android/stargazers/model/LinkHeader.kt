@@ -14,7 +14,7 @@ import retrofit2.Response
 class LinkHeader constructor() : Parcelable {
     var firstPage = 1
         private set
-    var lastPage = 2
+    var lastPage = 1
         private set
     var nextPage = 1
         private set
@@ -142,7 +142,7 @@ class LinkHeader constructor() : Parcelable {
 
     fun resetToFirstPage() {
         firstPage = 1
-        lastPage = 2
+        lastPage = 1
         nextPage = 1
         prevPage = 0
         perPage = 30
